@@ -1,0 +1,53 @@
+.topbanner {
+    background-color: lightblue;
+    line-height: 3em;
+}
+
+span.appname {
+    font-size: 20pt;
+}
+span.user {
+    color: blue;
+    float: right;
+}
+
+.uploadInput {
+    position: fixed;
+    top: -1000px;
+}
+.uploadSubmit {
+    position: fixed;
+    top: -1000px;
+}
+.uploadLabel {
+    border: 2px solid #AAA;
+    border-radius: 4px;
+    padding: 2px 5px;
+    margin: 2px;
+    background: #DDD;
+    display: inline-block;
+}
+.uploadLabel:hover {
+    background: #CCC;
+}
+
+.aiaContent {
+    text-align: left;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.aiaContentRow {
+    vertical-align: top;
+}
+.aiaContentHr {
+    border: 1px solid black;
+    white-space: nowrap;
+}
+.aiaContentTd {
+    border: 1px solid black;
+    white-space: nowrap;
+    padding: 7px;
+}
+.aiaContentForm {
+    height: 5px;
+}

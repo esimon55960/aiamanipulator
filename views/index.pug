@@ -1,0 +1,76 @@
+html
+  head
+    title
+        |AIA File Manipulator
+    link(rel='stylesheet', href='/public/ai_styles.css', type='text/css')
+    script(src='/public/ai_manipulator_client.js')
+
+  body(onload='displayAnyMessage("' + message + '")')
+    div.topbanner
+      form(method='GET', action='/logout')
+        |&nbsp;
+        span.appname
+            |AIA Manipulator
+        span.user
+            |&nbsp;Welcome: #{user.username}
+            |&nbsp;
+            button(type='submit') Logout
+    div(style='position:relative')
+        form(method='POST' action='/aia', encType="multipart/form-data")
+            label.uploadLabel
+                |Upload AIA file...
+                input.uploadInput(type='file' name='aiaFile', id='aiaFile', accept='.aia', required=true, onchange='this.form.submit();')
+            br
+            button.uploadSubmit(type='submit') Upload
+    table.aiaContent
+        tr
+            th.aiaContentHr AIA file
+            th.aiaContentHr Rename screen
+            th.aiaContentHr Copy screen
+
+        each aiaFile in aiaFiles
+            tr.aiaContentRow
+                td.aiaContentTd
+                    |#{aiaFile.name}
+                    form.aiaContentForm(method='GET' action='/aia/' + aiaFile.name)
+                        button(type='submit') Download
+                    br
+                    form.aiaContentForm(method='POST' action='/aia/modify')
+                        input(type='hidden', name='fileName', value=aiaFile.name)
+                        button(type='submit', name='action', value='unload') Unload
+                td.aiaContentTd
+                    each screen, i in aiaFile.screens
+                        div(style='padding-bottom:6px;')
+                                    form.aiaContentForm(method='POST' action='/aia/modify')
+                                        input(type='hidden', name='fileName', value=aiaFile.name)
+                                        input(type='hidden', name='version', value=aiaFile.version)
+                                        input(type='hidden', name='originalName', value=screen.screenName)
+                                        input(type='text', name='newName', size='20', value=screen.screenName)
+                                        |&nbsp;
+                                        button(type='submit', name='action', value='renameScreen') Rename
+                                        br
+                    if aiaFile.screens.length == 0
+                        | No screens
+
+                td.aiaContentTd
+                    form.aiaContentForm(method='POST' action='/aia/modify')
+                        input(type='hidden', name='fileName', value=aiaFile.name)
+                        input(type='hidden', name='version', value=aiaFile.version)
+                        if aiaFile.screens.length > 0 && aiaFiles.length > 1
+                            |Copy&nbsp;
+                            select(name='screenName')
+                                each copyScreen in aiaFile.screens
+                                    option(value=copyScreen.screenName) #{copyScreen.screenName}
+                            p
+                            | to&nbsp;
+                            select(name='targetNameAndVersion')
+                                each targetAiaFile in aiaFiles
+                                    if targetAiaFile.name != aiaFile.name
+                                        - nameVersion = targetAiaFile.name + '_' + targetAiaFile.version
+                                        option(value=nameVersion) #{targetAiaFile.name}
+                            |&nbsp;
+                            button(type='submit', name='action', value='copyScreen') Go
+                        else if aiaFile.screens.length == 0
+                            | No screens to copy
+                        else
+                            | No files to copy screen to
