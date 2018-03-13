@@ -5,10 +5,17 @@
 ## Setup
 Clone the repo
 ```
-https://github.com/esimon55960/aiamanipulator.git
+git clone https://github.com/esimon55960/aiamanipulator
 ```
 
 Install dependencies
-```bash
-$ npm install
+```
+npm install
+```
+
+Copy users.template.json to users.json and update the users/pw
+
+start server locally
+```
+node app.js
 ```
