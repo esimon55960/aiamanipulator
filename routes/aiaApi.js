@@ -35,7 +35,9 @@ router.get('/aia/:fileName', function(req, res, next) {
     req.logger.info('getting: name=' + req.params.fileName)
     const aiaFile = req.groupCache.getFile(req.params.fileName)
     if (aiaFile) {
+        res.
         req.logger.info('Downloading file', {name: aiaFile.name, version: aiaFile.version})
+        res.setHeader('content-type', 'application/octet-stream');
         aiaFile.getReadStream(req).pipe(res);
     } else {
         SessionHelper.storeMessage(req, 'AIA File was not found')
