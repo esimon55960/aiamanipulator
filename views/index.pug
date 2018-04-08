@@ -26,7 +26,8 @@ html
         tr
             th.aiaContentHr AIA file
             th.aiaContentHr Rename screen
-            th.aiaContentHr Copy screen
+            th.aiaContentHr Resources
+            th.aiaContentHr Copy screen or resource
 
         each aiaFile in aiaFiles
             tr.aiaContentRow
@@ -53,14 +54,25 @@ html
                         | No screens
 
                 td.aiaContentTd
+                    each resource in aiaFile.resources
+                        |#{resource.name}
+                        br
+                    if aiaFile.resources.length == 0
+                        | No resources
+
+                td.aiaContentTd
                     form.aiaContentForm(method='POST' action='/aia/modify')
                         input(type='hidden', name='fileName', value=aiaFile.name)
                         input(type='hidden', name='version', value=aiaFile.version)
                         if aiaFile.screens.length > 0 && aiaFiles.length > 1
                             |Copy&nbsp;
                             select(name='screenName')
-                                each copyScreen in aiaFile.screens
-                                    option(value=copyScreen.screenName) #{copyScreen.screenName}
+                                optgroup(label='Screens')
+                                    each copyScreen in aiaFile.screens
+                                        option(value=copyScreen.screenName) #{copyScreen.screenName}
+                                optgroup(label='Resources')
+                                    each copyResource in aiaFile.resources
+                                        option(value=copyResource.path) #{copyResource.name}
                             p
                             | to&nbsp;
                             select(name='targetNameAndVersion')
