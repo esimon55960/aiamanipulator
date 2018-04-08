@@ -1,5 +1,6 @@
 const express = require('express')
 const AIAFile = require('../lib/AIAFile')
+const AIAResource = require('../lib/aiaContent/AIAResource')
 const SessionHelper = require('../lib/util/SessionHelper')
 
 const ACTION_RENAME_SCREEN = 'renameScreen'
@@ -76,7 +77,11 @@ function copyScreen(req, aiaFile, screenName, targetFileName, targetVersion) {
     } else if (targetVersion != targetAiaFile.version) {
         return Promise.reject('Target AIA File was modified by somebody else. Please try again')
     } else  {
-        return targetAiaFile.copyScreenAsync(req, aiaFile, screenName)
+        if (AIAResource.isResource(screenName)) {
+            return targetAiaFile.copyResourceAsync(req, aiaFile, screenName)
+        } else {
+            return targetAiaFile.copyScreenAsync(req, aiaFile, screenName)
+        }
     }
 }
 
