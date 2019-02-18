@@ -41,7 +41,9 @@ app.use (function (req, res, next) {
 })
 
 app.use(require('./lib/SessionStore'));
-app.use(require('./lib/UserAuth').middleware());
+//app.use(require('./middleware/UserAuthBasic').middleware());
+app.use(require('./middleware/UserAuthGoogle'));
+
 app.use(require('./routes/index'));
 app.use(require('./routes/logout'));
 app.use(require('./routes/aiaApi'));
