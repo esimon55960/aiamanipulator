@@ -4,7 +4,7 @@
         {"name": "group1", "role": "team"}
     ],
     "users" : [
-        {"username": "johndoe@gmail.com", "password": "johnsPW", "group" : "administrator"},
-        {"username": "user1@gmail.com", "password": "pwhere", "group" : "group1"}
+        {"username": "johndoe@gmail.com", "password": "johnsPW", "group" : "administrator", "googleFolderId": "xxxxxx"},
+        {"username": "user1@gmail.com", "password": "pwhere", "group" : "group1", "googleFolderId": "xxxxxx"}
     ]
 }
