@@ -8,3 +8,8 @@ function displayAnyMessage(msg) {
         alert(msg)
     }
 }
+
+function showOverlay(msg) {
+    document.getElementById('overlayMessage').innerText = msg;
+    document.getElementById('overlay').style.display = 'block';
+}

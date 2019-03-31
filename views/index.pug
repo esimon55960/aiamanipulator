@@ -5,7 +5,12 @@ html
     link(rel='stylesheet', href='/public/ai_styles.css', type='text/css')
     script(src='/public/ai_manipulator_client.js')
 
-  body(onload='displayAnyMessage("' + message + '")')
+  body.fullPage(onload='displayAnyMessage("' + message + '")')
+    div.overlay(id='overlay', style='display:none')
+        span.overlayContent
+            img.overlayIcon(src="/public/waiting.gif", alt="Waiting...")
+            span(id='overlayMessage')
+                |content here
     div.topbanner
       form(method='GET', action='/logout')
         |&nbsp;
@@ -23,7 +28,7 @@ html
                 each googleFile in googleFiles
                     option(value=googleFile.id+'|'+googleFile.name) #{googleFile.name}
             |&nbsp;
-            button(type='submit', name='action', value='loadFile') Load
+            button(type='submit', name='action', value='loadFile', onclick='showOverlay("Loading AIA file")') Load
     p &nbsp;
     p
 
@@ -40,11 +45,11 @@ html
                     |#{aiaFile.name}
                     form.aiaContentForm(method='POST' action='/aia/saveToGoogle')
                         input(type='hidden', name='fileName', value=aiaFile.name)
-                        button(type='submit') Save changes
+                        button(type='submit', onclick='showOverlay("Saving changes")') Save changes
                     br
                     form.aiaContentForm(method='POST' action='/aia/modify')
                         input(type='hidden', name='fileName', value=aiaFile.name)
-                        button(type='submit', name='action', value='unload') Unload
+                        button(type='submit', name='action', value='unload', onclick='showOverlay("Unloading AIA file")') Unload
                 td.aiaContentTd
                     each screen, i in aiaFile.screens
                         div(style='padding-bottom:6px;')
@@ -54,7 +59,7 @@ html
                                         input(type='hidden', name='originalName', value=screen.screenName)
                                         input(type='text', name='newName', size='20', value=screen.screenName)
                                         |&nbsp;
-                                        button(type='submit', name='action', value='renameScreen') Rename
+                                        button(type='submit', name='action', value='renameScreen', onclick='showOverlay("Renaming screen")') Rename
                                         br
                     if aiaFile.screens.length == 0
                         | No screens
@@ -87,7 +92,7 @@ html
                                         - nameVersion = targetAiaFile.name + '_' + targetAiaFile.version
                                         option(value=nameVersion) #{targetAiaFile.name}
                             |&nbsp;
-                            button(type='submit', name='action', value='copyScreen') Go
+                            button(type='submit', name='action', value='copyScreen', onclick='showOverlay("Copying screen or image")') Go
                         else if aiaFile.screens.length == 0
                             | No screens to copy
                         else

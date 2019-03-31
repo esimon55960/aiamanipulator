@@ -51,3 +51,31 @@ span.user {
 .aiaContentForm {
     height: 5px;
 }
+
+.fullPage {
+    position: relative;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    padding: 5em;
+    background-color: rgba(0,0,0,0.2); /*dim the background*/
+}
+.overlayContent {
+    border: 4px outset gray;
+    padding: 1em;
+    padding-left: 0px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: white;
+}
+
+.overlayIcon {
+    vertical-align: middle;
+    overflow: hidden;
+    margin-right: 10px;
+}
