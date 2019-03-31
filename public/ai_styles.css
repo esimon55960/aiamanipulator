@@ -69,6 +69,7 @@ span.user {
     border: 4px outset gray;
     padding: 1em;
     padding-left: 0px;
+    max-width: 400px;
     text-align: center;
     vertical-align: middle;
     background-color: white;
@@ -78,4 +79,8 @@ span.user {
     vertical-align: middle;
     overflow: hidden;
     margin-right: 10px;
+}
+.overlayButtonSection {
+    text-align: center;
+    padding-top: 20px;
 }
