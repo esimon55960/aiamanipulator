@@ -59,13 +59,13 @@ html
                 td.aiaContentTd
                     each screen, i in aiaFile.screens
                         div(style='padding-bottom:6px;')
-                                    form.aiaContentForm(method='POST' action='/aia/modify')
+                                    form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this) && showWaiting("Renaming screen")')
                                         input(type='hidden', name='fileName', value=aiaFile.name)
                                         input(type='hidden', name='version', value=aiaFile.version)
                                         input(type='hidden', name='originalName', value=screen.screenName)
                                         input(type='text', name='newName', size='20', value=screen.screenName)
                                         |&nbsp;
-                                        button(type='submit', name='action', value='renameScreen', onclick='showWaiting("Renaming screen")') Rename
+                                        button(type='submit', name='action', value='renameScreen') Rename
                                         br
                     if aiaFile.screens.length == 0
                         | No screens
