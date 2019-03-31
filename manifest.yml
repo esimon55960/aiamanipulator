@@ -1,6 +1,0 @@
-applications:
-- name: AIAManipulator
-  random-route: false
-  host: aiamanipulator
-  instances: 1
-  memory: 128M

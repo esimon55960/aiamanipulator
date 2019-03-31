@@ -14,8 +14,16 @@ html
         span.user
             |&nbsp;Welcome: #{user.username}
             |&nbsp;
+            button(type='submit') Logout
+    div(style='position:relative')
+        form(method='POST' action='/aia', encType="multipart/form-data")
+            label.uploadLabel
+                |Upload AIA file...
+                input.uploadInput(type='file' name='aiaFile', id='aiaFile', accept='.aia', required=true, onchange='this.form.submit();')
+            br
+            button.uploadSubmit(type='submit') Upload
     div
-        | Load Google File
+        | Google Files
         br
         form.aiaContentForm(method='POST' action='/aia/loadFromGoogle')
             input(type='hidden', name='filePos', value='0')
@@ -24,8 +32,6 @@ html
                     option(value=googleFile.id+'|'+googleFile.name) #{googleFile.name}
             |&nbsp;
             button(type='submit', name='action', value='loadFile') Load
-    p &nbsp;
-    p
 
     table.aiaContent
         tr
@@ -38,9 +44,8 @@ html
             tr.aiaContentRow
                 td.aiaContentTd
                     |#{aiaFile.name}
-                    form.aiaContentForm(method='POST' action='/aia/saveToGoogle')
-                        input(type='hidden', name='fileName', value=aiaFile.name)
-                        button(type='submit') Save changes
+                    form.aiaContentForm(method='GET' action='/aia/' + aiaFile.name)
+                        button(type='submit') Download
                     br
                     form.aiaContentForm(method='POST' action='/aia/modify')
                         input(type='hidden', name='fileName', value=aiaFile.name)
@@ -92,4 +97,11 @@ html
                             | No screens to copy
                         else
                             | No files to copy screen to
+    br
+    hr
+    b Google Files
+    br
+    each googleFile in googleFiles
+        |#{googleFile.name} - #{googleFile.id}
+        br
     br

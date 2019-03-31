@@ -2,6 +2,7 @@ const express = require('express')
 const AIAFile = require('../lib/AIAFile')
 const AIAResource = require('../lib/aiaContent/AIAResource')
 const SessionHelper = require('../lib/util/SessionHelper')
+const driveApi = require('../lib/google/DriveApi')
 
 const ACTION_RENAME_SCREEN = 'renameScreen'
 const ACTION_COPY_SCREEN = 'copyScreen'
@@ -28,15 +29,55 @@ router.post('/aia', function (req, res, next) {
     }).catch((err) => {
         req.logger.error('Unexpected error processing AIA file.', err)
         SessionHelper.storeMessage(req, 'Unexpected error processing AIA file. Cause: ' + err)
+        res.redirect('back').addFile
+    })
+})
+
+router.post('/aia/loadFromGoogle', function(req, res, next) {
+    const filePos = req.body.filePos
+    const primaryFileSplit = req.body.fileInfo.split('|')
+    const fileId = primaryFileSplit[0]
+    const name = primaryFileSplit[1]
+    req.logger.info('loading google file', {fileId: fileId, name: name})
+
+    const aiaFile = new AIAFile(name, fileId)
+    driveApi.downloadFile(req, fileId).then(fileRes => {
+        return aiaFile.loadFromStream(req, fileRes.data)
+    }).then(() => {
+        req.groupCache.addFile(aiaFile)
+        res.redirect('back')
+    }).catch((err) => {
+        req.logger.error('Unexpected error processing AIA file.', err)
+        SessionHelper.storeMessage(req, 'Unexpected error processing AIA file. Cause: ' + err)
         res.redirect('back')
     })
+})
+
+router.post('/aia/saveToGoogle', function(req, res, next) {
+    const fileName = req.body.fileName
+    const aiaFile = req.groupCache.getFile(fileName)
+    if (aiaFile) {
+        req.logger.info('Saving file to google.', {name: aiaFile.name, version: aiaFile.version})
+        const data = aiaFile.getReadStream(req)
+        driveApi.saveFile(req, aiaFile.fileId, data).then(fileRes => {
+            req.logger.info('Completed saving file to google.')
+            SessionHelper.storeMessage(req, `File ${fileName} saved to google.`)
+            res.redirect('back')
+        }).catch((err) => {
+            req.logger.error('Unexpected error saving AIA file.', err)
+            SessionHelper.storeMessage(req, 'Unexpected error processing AIA file. Cause: ' + err)
+            res.redirect('back')
+        })
+    } else {
+        SessionHelper.storeMessage(req, 'AIA File was not found')
+        res.redirect('back')
+    }
 })
 
 router.get('/aia/:fileName', function(req, res, next) {
     req.logger.info('getting: name=' + req.params.fileName)
     const aiaFile = req.groupCache.getFile(req.params.fileName)
     if (aiaFile) {
-        res.
         req.logger.info('Downloading file', {name: aiaFile.name, version: aiaFile.version})
         res.setHeader('content-type', 'application/octet-stream');
         aiaFile.getReadStream(req).pipe(res);
@@ -102,6 +143,7 @@ function processModifyAction(req, aiaFile) {
         case ACTION_UNLOAD:
             req.logger.info('Removing file', {name:  aiaFile.name})
             req.groupCache.removeFile(aiaFile.name)
+            aiaFile.unloadFile(req)
             return Promise.resolve(true)
         default:
             req.logger.error('Unknown modify action', {action: action})

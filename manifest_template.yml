@@ -1,0 +1,11 @@
+applications:
+- name: %CF_APP_NAME%
+  random-route: false
+  host: %CF_HOST%
+  instances: 1
+  memory: 128M
+  env:
+    google_project_id: %google_project_id%
+    google_client_id: %google_client_id%
+    google_client_secret: %google_client_secret%
+    google_auth_baseurl: %google_production_auth_baseurl%

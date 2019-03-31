@@ -26,6 +26,19 @@ https://aiamanipulator.mybluemix.net/
 Google API Activation for google drive
 https://console.developers.google.com/apis/credentials?project=api-project-188408953265
 
+### Google API
+Node.js wrapper
+https://www.npmjs.com/package/googleapis
+
+Username information
+https://developers.google.com/identity/protocols/OpenIDConnect
+
+File API
+https://developers.google.com/drive/api/v3/reference/files/get
+
+Download
+https://developers.google.com/drive/api/v3/manage-downloads#examples
+
 Redirect URI
 https://aiamanipulator.mybluemix.net/driveauth
 
