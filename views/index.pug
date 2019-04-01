@@ -38,6 +38,70 @@ html
     p &nbsp;
     p
 
+    div(style='display: flex; flex-flow: row nowrap; width:100%')
+        div(style='width: 40%; margin-right:15px;')
+            div
+                | Load Primary Google File
+                br
+                form.aiaContentForm(method='POST' action='/aia/loadFromGoogle')
+                    input(type='hidden', name='filePos', value='0')
+                    select(name='fileInfo', onChange='primaryFileChange("' + (primaryAia?primaryAia.name:null) +'")')
+                        option(value='') #{'<<Select File>>'}
+                        each googleFile in googleFiles
+                            option(value=googleFile.id+'|'+googleFile.name, 
+                                    selected=(primaryAia && googleFile.name == primaryAia.name)) 
+                                |#{googleFile.name}
+                    |&nbsp;
+                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file")') Load
+            div(style='border:1px solid black; padding: 5px;')
+                if (primaryAia)
+                    div(style='display: flex; flex-flow: row wrap;')
+                        - var aiaFile = primaryAia
+                        form.aiaContentForm(method='POST' action='/aia/saveToGoogle')
+                            |#{aiaFile.name}
+                            |&nbsp;
+                            input(type='hidden', name='fileName', value=aiaFile.name)
+                            button(type='submit', onclick='showWaiting("Saving changes")') Save changes
+                        |&nbsp;
+                        form.aiaContentForm(method='POST' action='/aia/modify', style='display: inline-block;')
+                            input(type='hidden', name='fileName', value=aiaFile.name)
+                            button(type='submit', name='action', value='unload', onclick='showWaiting("Unloading AIA file")') Unload
+                    |Screens
+                    each screen, i in aiaFile.screens
+                        div(style='padding-bottom:6px; padding-left: 15px;')
+                            form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this) && showWaiting("Renaming screen")')
+                                input(type='hidden', name='fileName', value=aiaFile.name)
+                                input(type='hidden', name='version', value=aiaFile.version)
+                                input(type='hidden', name='originalName', value=screen.screenName)
+                                input(type='text', name='newName', size='20', value=screen.screenName)
+                                |&nbsp;
+                                button(type='submit', name='action', value='renameScreen') Rename
+                    if aiaFile.screens.length == 0
+                        div(style='padding-bottom:6px; padding-left: 15px;')
+                            | No screens
+                    | Resources                    
+                    div(style='padding-bottom:6px; padding-left: 15px;')
+                        each resource in aiaFile.resources
+                            |#{resource.name}
+                        if aiaFile.resources.length == 0
+                            | No resources
+                    
+
+        div(style='width: 40%;')
+            div
+                | Load Secondary Google File
+                br
+                form.aiaContentForm(method='POST' action='/aia/loadFromGoogle')
+                    input(type='hidden', name='filePos', value='0')
+                    select(name='fileInfo')
+                        option(value='') #{'<<Select File>>'}
+                        each googleFile in googleFiles
+                            option(value=googleFile.id+'|'+googleFile.name) #{googleFile.name}
+                    |&nbsp;
+                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file")') Load
+
+    p &nbsp;
+    p &nbsp;
     table.aiaContent
         tr
             th.aiaContentHr AIA file

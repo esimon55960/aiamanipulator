@@ -31,3 +31,11 @@ function validScreenName(form) {
         return true;
     }
 }
+
+function primaryFileChange(name) {
+    console.info('Original primary=' + name);
+}
+
+function toggleFileLoadButtons(name, selectId, formId) {
+    
+}
