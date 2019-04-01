@@ -15,7 +15,7 @@ echo Set bluemix target
 ibmcloud target --cf-api api.ng.bluemix.net -o %CF_ORG% -s %CF_SPACE%
 
 echo Deploy the application
-echo ibmcloud cf push
+ibmcloud cf push
 
 @echo Push completed. Display status now
 ibmcloud cf apps
