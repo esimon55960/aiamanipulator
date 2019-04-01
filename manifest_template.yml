@@ -3,7 +3,9 @@ applications:
   random-route: false
   host: %CF_HOST%
   instances: 1
-  memory: 128M
+  memory: 230M
+  health-check-type: http
+  health-check-http-endpoint: /health
   env:
     google_project_id: %google_project_id%
     google_client_id: %google_client_id%
