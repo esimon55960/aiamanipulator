@@ -34,7 +34,7 @@ html
                 each googleFile in googleFiles
                     option(value=googleFile.id+'|'+googleFile.name) #{googleFile.name}
             |&nbsp;
-            button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file")') Load
+            button(type='submit', name='action', disabled=googleFiles.length==0, value='loadFile', onclick='showWaiting("Loading AIA file")') Load
     p &nbsp;
     p
 
