@@ -17,6 +17,7 @@ app.set('trust proxy', 1)
 app.set('view engine', 'pug')
 app.set('views', './views')
 app.use('/public', express.static('./public'));
+app.use(express.static('./public'));
 
 app.use(function(req, res, next) {
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -39,6 +40,9 @@ app.use (function (req, res, next) {
         res.redirect(targetUrl);
     }
 })
+
+// routes that don't require authentication
+app.use(require('./routes/health'));
 
 app.use(require('./lib/SessionStore'));
 //app.use(require('./middleware/UserAuthBasic').middleware());
