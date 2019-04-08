@@ -51,7 +51,7 @@ html
                     |Screens
                     each screen, i in aiaFile.screens
                         div(style='padding-bottom:6px; padding-left: 15px; flex; flex-flow: row nowrap;')
-                            form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this) && showWaiting("Renaming screen")'
+                            form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this)'
                                     stylex='display: inline-block;')
                                 input(type='hidden', name='fileName', value=aiaFile.name)
                                 input(type='hidden', name='version', value=aiaFile.version)
@@ -59,14 +59,14 @@ html
                                 input(type='hidden' name='screenName' value=screen.screenName)
                                 input(type='text', name='newName', size='20', value=screen.screenName)
                                 |&nbsp;
-                                button(type='submit', name='action', value='renameScreen') Rename
+                                button(type='submit', name='action', value='renameScreen' onclick='showWaiting("Renaming screen...")') Rename
                                 if secondaryAia
                                     |&nbsp;&nbsp;&nbsp;
                                     - var nameVersion = secondaryAia.name + '_' + secondaryAia.version
                                     input(type='hidden' name='targetNameAndVersion' value=nameVersion)
                                     button(type='submit', name='action', value='copyScreen' 
                                         title='Copy to secondary file'
-                                        onclick='showWaiting("Copying screen")') Copy >>
+                                        onclick='showWaiting("Copying screen...")') Copy >>
                     if aiaFile.screens.length == 0
                         div(style='padding-bottom:6px; padding-left: 15px;')
                             | No screens
@@ -85,7 +85,7 @@ html
                                     input(type='hidden' name='targetNameAndVersion' value=nameVersion)
                                     button(type='submit', name='action', value='copyScreen' 
                                         title='Copy to secondary fileX'
-                                        onclick='showWaiting("Copying resource")') Copy >>
+                                        onclick='showWaiting("Copying resource...")') Copy >>
 
                         if aiaFile.resources.length == 0
                             | No resources
