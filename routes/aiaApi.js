@@ -7,29 +7,22 @@ const driveApi = require('../lib/google/DriveApi')
 const ACTION_RENAME_SCREEN = 'renameScreen'
 const ACTION_COPY_SCREEN = 'copyScreen'
 const ACTION_UNLOAD = 'unload'
-const MAX_OPEN_FILES_PER_TEAM = 3
 
 const router = express.Router()
 
 router.post('/aia', function (req, res, next) {
-    if (req.groupCache.getFiles().length >= MAX_OPEN_FILES_PER_TEAM) {
-        SessionHelper.storeErrorMessage(req, 'A maximum of ' + MAX_OPEN_FILES_PER_TEAM +
-            ' files can be opened. Unload a file and retry the operation')
-        res.redirect('back')
-        return
-    }
-
     req.logger.info('Loading AIA file', {name: req.files.aiaFile.name, fileSize: req.files.aiaFile.data.length})
 
     let aiaFile = new AIAFile(req.files.aiaFile.name)
     aiaFile.loadAsync(req, req.files.aiaFile.data).then(() => {
         req.logger.info('Done loading AIA file')
-        req.groupCache.addFile(aiaFile)
+        const filePos = 0   //TODO: Get this from payload?
+        req.groupCache.setByPos(filePos, aiaFile)
         res.redirect('back')
     }).catch((err) => {
         req.logger.error('Unexpected error processing AIA file.', err)
         SessionHelper.storeErrorMessage(req, 'Unexpected error processing AIA file. Cause: ' + err)
-        res.redirect('back').addFile
+        res.redirect('back')
     })
 })
 
@@ -40,11 +33,25 @@ router.post('/aia/loadFromGoogle', function(req, res, next) {
     const name = primaryFileSplit[1]
     req.logger.info('loading google file', {fileId: fileId, name: name})
 
+    // unload the old file we are loading to replace
+    const oldAiaFile = req.groupCache.getByPos(filePos)
+    if (oldAiaFile) {
+        oldAiaFile.unloadFile(req)
+        req.groupCache.setByPos(filePos, undefined)
+    }
+    // unload the alternate if it's the same file
+    const alternatePos = filePos == 0 ? 1 : 0
+    const otherAiaFile = req.groupCache.getByPos(alternatePos)
+    if (otherAiaFile && otherAiaFile.name == name) {
+        otherAiaFile.unloadFile(req)
+        req.groupCache.setByPos(alternatePos, undefined)
+    }
+
     const aiaFile = new AIAFile(name, fileId)
     driveApi.downloadFile(req, fileId).then(fileRes => {
         return aiaFile.loadFromStream(req, fileRes.data)
     }).then(() => {
-        req.groupCache.addFile(aiaFile)
+        req.groupCache.setByPos(filePos, aiaFile)
         res.redirect('back')
     }).catch((err) => {
         req.logger.error('Unexpected error processing AIA file.', err)
@@ -128,6 +135,7 @@ function copyScreen(req, aiaFile, screenName, targetFileName, targetVersion) {
 
 function processModifyAction(req, aiaFile) {
     const action =  req.body.action
+    const filePos = req.body.filePos
     req.logger.info('Found file to modify', {action: action, name: aiaFile.name, version: aiaFile.version})
     switch (action) {
         case ACTION_RENAME_SCREEN:
@@ -142,7 +150,7 @@ function processModifyAction(req, aiaFile) {
             return copyScreen(req, aiaFile, screenName, targetFileName, targetVersion)
         case ACTION_UNLOAD:
             req.logger.info('Removing file', {name:  aiaFile.name})
-            req.groupCache.removeFile(aiaFile.name)
+            req.groupCache.setByPos(filePos, undefined)
             aiaFile.unloadFile(req)
             return Promise.resolve(true)
         default:

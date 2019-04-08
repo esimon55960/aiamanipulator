@@ -12,7 +12,6 @@ router.get('/', function (req, res, next) {
         res.render('index', {
             user: req.session.user,
             message: SessionHelper.getAndClearMessage(req),
-            aiaFiles: req.groupCache.getFiles(),
             googleFiles: files,
             primaryAia: req.groupCache.getPrimary(),
             secondaryAia: req.groupCache.getSecondary()
@@ -25,7 +24,6 @@ router.get('/', function (req, res, next) {
         res.render('index', {
             user: req.session.user,
             message: SessionHelper.getAndClearMessage(req),
-            aiaFiles: req.groupCache.getFiles(),
             googleFiles: [],
             primaryAia: req.groupCache.getPrimary(),
             secondaryAia: req.groupCache.getSecondary()
