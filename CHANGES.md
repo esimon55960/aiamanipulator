@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v1.1.4 - 2019-04-09
+- Detect empty resource files and stub them so MIT app inventor can load them.
+
 ### v1.1.3 - 2019-04-07
 - Switch to having 2 files open at a time on left and right instead of multiple listed
     down. 

@@ -139,6 +139,7 @@ html
                     div(style='padding-bottom:6px; padding-left: 15px;')
                         each resource in aiaFile.resources
                             |#{resource.name}
+                            br
                         if aiaFile.resources.length == 0
                             | No resources
 
