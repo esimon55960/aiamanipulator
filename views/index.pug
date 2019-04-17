@@ -41,7 +41,7 @@ html
                                     selected=(primaryAia && googleFile.name == primaryAia.name)) 
                                 |#{googleFile.name}
                     |&nbsp;
-                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file")') Load
+                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file...")') Load
             div(style='border:1px solid black; padding: 5px; margin-top:30px;')
                 if (primaryAia)
                     - var aiaFile = primaryAia
@@ -92,12 +92,12 @@ html
                     div(style='margin-top: 10px; display: flex; flex-flow: row wrap; justify-content: center;')
                         form.aiaContentForm(method='POST' action='/aia/saveToGoogle')
                             input(type='hidden', name='fileName', value=aiaFile.name)
-                            button(type='submit', onclick='showWaiting("Saving changes")') Save
+                            button(type='submit', onclick='showWaiting("Saving changes...")') Save
                         |&nbsp;&nbsp;
                         form.aiaContentForm(method='POST' action='/aia/modify', style='display: inline-block;')
                             input(type='hidden', name='fileName', value=aiaFile.name)
                             input(type='hidden', name='filePos', value='0')
-                            button(type='submit', name='action', value='unload', onclick='showWaiting("Unloading AIA file")') Unload
+                            button(type='submit', name='action', value='unload', onclick='showWaiting("Unloading AIA file...")') Unload
                 else
                     p - no file selected yet
                     
@@ -115,7 +115,7 @@ html
                                     selected=(secondaryAia && googleFile.name == secondaryAia.name)) 
                                 |#{googleFile.name}
                     |&nbsp;
-                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file")') Load
+                    button(type='submit', name='action', value='loadFile', onclick='showWaiting("Loading AIA file...")') Load
             div(style='border:1px solid black; padding: 5px; margin-top:30px;')
                 if (secondaryAia)
                     - var aiaFile = secondaryAia
@@ -125,7 +125,7 @@ html
                     |Screens
                     each screen, i in aiaFile.screens
                         div(style='padding-bottom:6px; padding-left: 15px;')
-                            form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this) && showWaiting("Renaming screen")')
+                            form.aiaContentForm(method='POST' action='/aia/modify', onsubmit='return validScreenName(this) && showWaiting("Renaming screen...")')
                                 input(type='hidden', name='fileName', value=aiaFile.name)
                                 input(type='hidden', name='version', value=aiaFile.version)
                                 input(type='hidden', name='originalName', value=screen.screenName)
@@ -146,12 +146,12 @@ html
                     div(style='display: flex; flex-flow: row wrap; justify-content: center;')
                         form.aiaContentForm(method='POST' action='/aia/saveToGoogle')
                             input(type='hidden', name='fileName', value=aiaFile.name)
-                            button(type='submit', onclick='showWaiting("Saving changes")') Save
+                            button(type='submit', onclick='showWaiting("Saving changes...")') Save
                         |&nbsp;&nbsp;
                         form.aiaContentForm(method='POST' action='/aia/modify', style='display: inline-block;')
                             input(type='hidden', name='fileName', value=aiaFile.name)
                             input(type='hidden', name='filePos', value='1')
-                            button(type='submit', name='action', value='unload', onclick='showWaiting("Unloading AIA file")') Unload
+                            button(type='submit', name='action', value='unload', onclick='showWaiting("Unloading AIA file...")') Unload
                 else
                     p - no file selected yet
 

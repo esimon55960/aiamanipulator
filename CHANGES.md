@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v1.1.5 - 2019-04-16
+- Change the waiting messages to all have ...
+  (mostly because need to redeploy every 14 days or bluemix shuts it down)
+
 ### v1.1.4 - 2019-04-09
 - Detect empty resource files and stub them so MIT app inventor can load them.
 
